@@ -38,18 +38,14 @@
 
 | 文件或目录 | 内容 |
 | --- | --- |
-| `1、m温度n个全CLTC-P工况循环CD-CS（有图）(2).py` | CD-CS 策略仿真及 SOC、功率、温度绘图 |
+| `1、m温度n个全CLTC-P工况循环CD-CS（有图）(1).py` | 25 ℃环境下的 CD-CS 策略仿真及绘图 |
+| `1、m温度n个全CLTC-P工况循环CD-CS（有图）(2).py` | 35 ℃环境下的 CD-CS 策略仿真及绘图 |
 | `2-1、m温度n个全CLTC-P工况循环双SOC - 普通ECMS.py` | 不同初始 SOC 下的普通 ECMS 仿真 |
 | `2-2 最优组合.py` | A-ECMS 参数组合扫描与寻优 |
 | `3-2、策略对比.py` | CD-CS、ECMS、Thermal ECMS 综合对比 |
 | `4、 DP热约束ECMS评估.py` | DP 与 Thermal ECMS 对比评价 |
-| `副本CLTC.xlsx` | CLTC 工况相关数据 |
-| `1/25`、`1/35` | 不同环境温度下的 CD-CS 仿真图 |
-| `3` | ECMS 仿真结果图 |
+| `strategy_comparison.png` | 三种能量管理策略综合对比图 |
 | `课程设计报告-张容-2023213357.pdf` | 完整课程设计报告 |
-| `CLTC 标准.pdf` | CLTC 标准参考材料 |
-
-文件 `(1).py` 与 `(2).py` 为同一阶段保留的两个版本，推荐运行较新的 `(2).py`。
 
 ## 环境配置
 
@@ -58,8 +54,6 @@
 - pandas
 - SciPy
 - Matplotlib
-- openpyxl
-- python-docx（仅生成公式文档时需要）
 
 创建虚拟环境并安装依赖：
 
@@ -91,8 +85,11 @@ strategy_comparison.png
 其他实验：
 
 ```powershell
-# CD-CS 基准策略
+# CD-CS 基准策略（35 ℃）
 python ".\1、m温度n个全CLTC-P工况循环CD-CS（有图）(2).py"
+
+# CD-CS 基准策略（25 ℃）
+python ".\1、m温度n个全CLTC-P工况循环CD-CS（有图）(1).py"
 
 # 普通 ECMS
 python ".\2-1、m温度n个全CLTC-P工况循环双SOC - 普通ECMS.py"
@@ -115,9 +112,8 @@ python ".\4、 DP热约束ECMS评估.py"
 
 - 本项目用于课程设计与学术交流，模型参数和结果不应直接用于实车控制。
 - 公开仓库前请检查报告、任务书等文档中的姓名、学号、教师信息及其他个人信息。
-- `CLTC 标准.pdf` 等参考资料可能受版权约束；公开发布前请确认拥有再分发权限，必要时只保留来源链接。
+- CLTC 标准等参考资料可能受版权约束，本仓库不提供标准原文，请通过正式渠道获取。
 
 ## 作者
 
 张容，智能车辆工程专业，2026 年 7 月。
-
