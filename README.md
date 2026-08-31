@@ -68,39 +68,6 @@ Windows PowerShell：
 python -m pip install -r requirements.txt
 ```
 
-## 快速运行
-
-推荐先运行三策略综合对比：
-
-```powershell
-python ".\3-2、策略对比.py"
-```
-
-运行成功后会在当前目录生成：
-
-```text
-strategy_comparison.png
-```
-
-其他实验：
-
-```powershell
-# CD-CS 基准策略（35 ℃）
-python ".\1、m温度n个全CLTC-P工况循环CD-CS（有图）(2).py"
-
-# CD-CS 基准策略（25 ℃）
-python ".\1、m温度n个全CLTC-P工况循环CD-CS（有图）(1).py"
-
-# 普通 ECMS
-python ".\2-1、m温度n个全CLTC-P工况循环双SOC - 普通ECMS.py"
-
-# 参数寻优
-python ".\2-2 最优组合.py"
-
-# DP 与热约束 ECMS 对比（计算量较大）
-python ".\4、 DP热约束ECMS评估.py"
-```
-
 ## 复现实验说明
 
 - 各脚本目前是可独立运行的实验程序，车辆参数、温度、SOC、循环次数及控制参数在脚本中直接设置。
