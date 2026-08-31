@@ -1,56 +1,56 @@
-# PHEV 能量管理与热管理协同控制
+# PHEV Energy and Thermal Management
 
-面向 CLTC-P 工况，我完成了 PHEV 动力系统建模、能量管理策略设计、热约束控制、参数寻优和动态规划基准验证，形成了从需求功率计算到策略评价的完整仿真流程。
+I developed a complete simulation framework for the coordinated energy and battery thermal management of a plug-in hybrid electric vehicle under the CLTC-P driving cycle. The project covers power-demand modeling, control-strategy development, parameter optimization, and dynamic-programming-based benchmarking.
 
-## 我完成的工作
+## Key Contributions
 
-- 建立整车纵向动力学模型，根据车速、加速度、滚阻、风阻和坡度计算需求功率。
-- 建立发动机燃油消耗、电机效率、电池 SOC 与电池一阶热模型。
-- 实现 CD-CS、ECMS 和 Thermal ECMS 三种在线能量管理策略。
-- 在 ECMS 瞬时等效油耗中加入电池温度惩罚项，使功率分配同时考虑经济性与温升。
-- 扫描等效因子、SOC 反馈系数和温度惩罚权重，寻找综合性能更好的参数组合。
-- 建立动态规划模型，通过状态、控制量离散和逆向求解获得全局优化基准，用于评价 Thermal ECMS。
-- 统一计算燃油消耗、电耗、冷却能耗、综合油耗、终端 SOC、最高温度和温度越界时间。
+- Built a longitudinal vehicle dynamics model to calculate power demand from vehicle speed, acceleration, rolling resistance, aerodynamic drag, and road gradient.
+- Modeled engine fuel consumption, motor efficiency, battery state of charge, and first-order battery thermal dynamics.
+- Implemented three online energy-management strategies: CD-CS, ECMS, and thermal-constrained ECMS.
+- Added a battery-temperature penalty to the ECMS instantaneous cost function to balance energy efficiency and thermal safety.
+- Optimized the ECMS equivalence factor, SOC feedback coefficient, and temperature-penalty weight through parameter sweeps.
+- Developed a dynamic programming benchmark using discretized states and controls to evaluate the performance of thermal-constrained ECMS against a global optimum.
+- Created a unified evaluation pipeline covering fuel consumption, electrical energy consumption, equivalent fuel consumption, terminal SOC, peak battery temperature, and temperature-limit violations.
 
-## 控制策略
+## Control Methods
 
-| 策略 | 核心设计 |
+| Method | Implementation |
 | --- | --- |
-| CD-CS | 按 SOC 阈值在纯电消耗与电量维持阶段之间切换 |
-| ECMS | 将电能消耗折算为等效燃油，在每个时刻优化发动机与电池功率分配 |
-| Thermal ECMS | 在 ECMS 目标函数中加入温度惩罚，抑制高温状态下的电池负荷 |
-| DP | 以 SOC 和温度为状态、发动机功率为控制量，逆向求解全局最优轨迹 |
+| CD-CS | Switches between charge-depleting and charge-sustaining operation according to SOC thresholds |
+| ECMS | Converts electrical energy into equivalent fuel consumption and optimizes engine-battery power allocation at each time step |
+| Thermal ECMS | Adds a temperature-dependent penalty to ECMS to reduce battery loading at elevated temperatures |
+| Dynamic Programming | Uses SOC and battery temperature as states and engine power as the control input to obtain a global optimization benchmark |
 
-## 仿真结果
+## Simulation Results
 
-默认对比工况：30 个 CLTC-P 循环、环境温度 35 ℃、初始 SOC 0.60，ECMS 等效因子 `s=1.6`，温度惩罚权重 `w_T=5.0`。
+Baseline comparison: 30 CLTC-P cycles, ambient temperature of 35 °C, initial SOC of 0.60, ECMS equivalence factor `s = 1.6`, and thermal penalty weight `w_T = 5.0`.
 
-| 策略 | 综合油耗 (L/100 km) | 终端 SOC | 最高温度 (℃) |
+| Strategy | Equivalent Fuel Consumption (L/100 km) | Final SOC | Peak Battery Temperature (°C) |
 | --- | ---: | ---: | ---: |
 | CD-CS | 7.05 | 0.569 | 35.3 |
 | ECMS | 22.32 | 0.694 | 36.5 |
 | Thermal ECMS | 14.09 | 0.612 | 35.0 |
 
-![CD-CS、ECMS 与 Thermal ECMS 策略对比](strategy_comparison.png)
+![Comparison of CD-CS, ECMS, and Thermal ECMS](strategy_comparison.png)
 
-对比结果展示了三种策略下的 SOC、电池温度、发动机功率和电池功率轨迹。Thermal ECMS 在当前参数下将最高电池温度控制在 35.0 ℃，同时使终端 SOC 更接近初始设定。
+Under the selected parameters, Thermal ECMS limited the peak battery temperature to 35.0 °C and maintained the final SOC closer to its initial value than the other strategies.
 
-## 核心代码
+## Repository Structure
 
-| 文件 | 实现内容 |
+| File | Description |
 | --- | --- |
-| `1、m温度n个全CLTC-P工况循环CD-CS（有图）(1).py` | 25 ℃环境下的 CD-CS 仿真 |
-| `1、m温度n个全CLTC-P工况循环CD-CS（有图）(2).py` | 35 ℃环境下的 CD-CS 仿真 |
-| `2-1、m温度n个全CLTC-P工况循环双SOC - 普通ECMS.py` | 不同初始 SOC 下的 ECMS 仿真 |
-| `2-2 最优组合.py` | A-ECMS 参数组合扫描与寻优 |
-| `3-2、策略对比.py` | CD-CS、ECMS 与 Thermal ECMS 统一对比 |
-| `4、 DP热约束ECMS评估.py` | DP 全局优化及 Thermal ECMS 评价 |
-| `课程设计报告-张容-2023213357.pdf` | 模型、控制方法和结果的完整说明 |
+| `cdcs_25c.py` | CD-CS simulation at an ambient temperature of 25 °C |
+| `cdcs_35c.py` | CD-CS simulation at an ambient temperature of 35 °C |
+| `ecms_dual_soc.py` | ECMS evaluation with different initial SOC values |
+| `aecms_parameter_optimization.py` | Adaptive ECMS parameter sweep and optimization |
+| `strategy_comparison.py` | Unified comparison of CD-CS, ECMS, and Thermal ECMS |
+| `dp_thermal_ecms_evaluation.py` | Dynamic programming benchmark and Thermal ECMS evaluation |
+| `course_design_report.pdf` | Full methodology, mathematical models, and results |
 
-## 技术栈
+## Technical Stack
 
-Python、NumPy、pandas、SciPy、Matplotlib。
+Python, NumPy, pandas, SciPy, and Matplotlib.
 
-## 作者
+## Author
 
-张容｜智能车辆工程｜2026 年 7 月
+Zhang Rong | Intelligent Vehicle Engineering | July 2026
